@@ -148,8 +148,8 @@ export function LoginForm({
 
           <div className="relative hidden md:block">
             <img
-              src="https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=800&h=1000&fit=crop"
-              alt="Health and wellness lifestyle"
+              src="https://images.unsplash.com/photo-1614064641938-3bbee52942c7?w=800&h=1000&fit=crop"
+              alt="Secure login"
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.7] dark:grayscale"
             />
           </div>

@@ -164,8 +164,8 @@ export function SignupForm({
           </form>
           <div className="relative hidden md:block">
             <img
-              src="https://images.unsplash.com/photo-1556228720-195a672e8a03?w=800&h=1000&fit=crop"
-              alt="Wellness and lifestyle products"
+              src="https://images.unsplash.com/photo-1488998427799-e3362cec87c3?w=800&h=1000&fit=crop"
+              alt="Create new account"
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.7] dark:grayscale"
             />
           </div>

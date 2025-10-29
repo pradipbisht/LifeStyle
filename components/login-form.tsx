@@ -148,9 +148,9 @@ export function LoginForm({
 
           <div className="relative hidden md:block">
             <img
-              src="/placeholder.svg"
-              alt="Image"
-              className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+              src="https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=800&h=1000&fit=crop"
+              alt="Health and wellness lifestyle"
+              className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.7] dark:grayscale"
             />
           </div>
         </CardContent>

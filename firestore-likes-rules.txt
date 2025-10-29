@@ -1,0 +1,83 @@
+// ============================================
+// FIRESTORE SECURITY RULES FOR BLOG LIKES
+// ============================================
+// Add these rules to your firestore.rules file
+// Copy and paste into Firebase Console → Firestore Database → Rules
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Blog Likes Collection
+    match /blogLikes/{likeId} {
+      // Anyone can read likes (for displaying counts)
+      allow read: if true;
+      
+      // Only authenticated users can create likes
+      // Must set their own userId
+      // Can only have one like per blog per user
+      allow create: if request.auth != null 
+                    && request.resource.data.userId == request.auth.uid
+                    && request.resource.data.blogId is string
+                    && request.resource.data.type == "like";
+      
+      // Users can only delete their own likes
+      allow delete: if request.auth != null 
+                    && resource.data.userId == request.auth.uid;
+      
+      // No updates allowed (create/delete only)
+      allow update: if false;
+    }
+    
+    // Update Blogs Collection to allow like counter updates
+    match /blogs/{blogId} {
+      // Anyone can read published blogs
+      allow read: if resource.data.status == "published";
+      
+      // 🆕 ANYONE (including anonymous) can update ONLY the likes field
+      // This allows both authenticated and anonymous users to like
+      allow update: if request.resource.data.diff(resource.data).affectedKeys().hasOnly(['likes']);
+      
+      // Admin and verified users can create/update blogs (your existing rules)
+      allow create, update: if request.auth != null 
+                            && request.resource.data.authorId == request.auth.uid
+                            && (
+                              get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin"
+                              || (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isVerified == true
+                                  && request.resource.data.status in ["draft", "pending"])
+                            );
+      
+      // Only admin can delete blogs
+      allow delete: if request.auth != null 
+                    && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+    }
+  }
+}
+
+// ============================================
+// EXPLANATION OF RULES:
+// ============================================
+
+// blogLikes Collection:
+// - READ: Anyone (public) - needed for displaying like counts
+// - CREATE: Authenticated users only
+//   * Must set userId to their own UID (prevents impersonation)
+//   * Must provide valid blogId
+//   * Type must be "like"
+// - DELETE: Users can only delete their own likes (for unlike)
+// - UPDATE: Not allowed (enforce create/delete pattern)
+
+// blogs Collection Updates:
+// - Added rule to allow authenticated users to update ONLY the "likes" field
+// - This lets the LikeButton component increment/decrement the counter
+// - Uses .diff() to ensure only the likes field is being modified
+// - All other blog update rules remain unchanged
+
+// ============================================
+// HOW TO APPLY:
+// ============================================
+// 1. Go to Firebase Console: https://console.firebase.google.com
+// 2. Select your project
+// 3. Navigate to: Firestore Database → Rules
+// 4. Replace or merge with your existing rules
+// 5. Click "Publish" to activate

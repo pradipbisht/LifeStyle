@@ -1,0 +1,179 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ===== USERS COLLECTION =====
+    match /users/{userId} {
+      // Anyone can read user profiles (for display purposes like blog authors, comments, etc.)
+      allow read: if true;
+      
+      // ONLY ADMINS can create users (no self-signup)
+      allow create: if request.auth != null 
+                    && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+      
+      // ONLY ADMINS can update user profiles (users cannot update themselves)
+      allow update: if request.auth != null 
+                    && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+      
+      // ONLY ADMINS can delete users
+      allow delete: if request.auth != null 
+                    && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+    }
+    
+    // ===== BLOGS COLLECTION =====
+    match /blogs/{blogId} {
+      // Anyone can read published blogs
+      // Authenticated & verified users can read their own drafts/pending
+      // Admins can read everything
+      allow read: if resource.data.status == "published" 
+                  || (request.auth != null 
+                      && request.auth.uid == resource.data.authorId
+                      && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isVerified == true)
+                  || (request.auth != null 
+                      && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin");
+      
+      // ADMINS can create with any status
+      // VERIFIED users can create draft or pending
+      allow create: if request.auth != null 
+                    && request.resource.data.authorId == request.auth.uid
+                    && (
+                      get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin"
+                      || (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isVerified == true
+                          && request.resource.data.status in ["draft", "pending"])
+                    );
+      
+      // Admins can update anything
+      // Verified users can update their own (but not publish)
+      // ANYONE can update likes counter only
+      allow update: if request.auth != null 
+                    && (
+                      get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin"
+                      || (request.auth.uid == resource.data.authorId 
+                          && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isVerified == true
+                          && request.resource.data.status != "published")
+                    )
+                    || request.resource.data.diff(resource.data).affectedKeys().hasOnly(['likes']);
+      
+      // Only admins can delete blogs
+      allow delete: if request.auth != null 
+                    && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+    }
+    
+    // ===== BLOG LIKES COLLECTION (for authenticated users) =====
+    match /blogLikes/{likeId} {
+      // Anyone can read likes
+      allow read: if true;
+      
+      // Authenticated users can create likes
+      allow create: if request.auth != null 
+                    && request.resource.data.userId == request.auth.uid;
+      
+      // Users can delete their own likes
+      allow delete: if request.auth != null 
+                    && resource.data.userId == request.auth.uid;
+    }
+    
+    // ===== COMMENTS COLLECTION =====
+    match /comments/{commentId} {
+      // Anyone can read comments
+      allow read: if true;
+      
+      // Only VERIFIED users can create comments
+      allow create: if request.auth != null 
+                    && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isVerified == true
+                    && request.resource.data.userId == request.auth.uid;
+      
+      // Verified users can update/delete their own comments, admins can delete any
+      allow update, delete: if request.auth != null 
+                            && (
+                              (request.auth.uid == resource.data.userId 
+                               && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isVerified == true)
+                              || get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin"
+                            );
+    }
+    
+    // ===== LIKES COLLECTION =====
+    match /likes/{likeId} {
+      // Anyone can read likes
+      allow read: if true;
+      
+      // Only VERIFIED users can like
+      allow create: if request.auth != null 
+                    && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isVerified == true
+                    && request.resource.data.userId == request.auth.uid;
+      
+      // Verified users can delete their own likes
+      allow delete: if request.auth != null 
+                    && request.auth.uid == resource.data.userId
+                    && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isVerified == true;
+    }
+    
+    // ===== CONTACTS COLLECTION =====
+    match /contacts/{contactId} {
+      // Anyone can create a contact message
+      allow create: if request.resource.data.name is string
+                    && request.resource.data.name.size() >= 2
+                    && request.resource.data.email is string
+                    && request.resource.data.email.matches('.*@.*\\..*')
+                    && request.resource.data.subject is string
+                    && request.resource.data.message is string
+                    && request.resource.data.message.size() >= 10
+                    && request.resource.data.message.size() <= 500
+                    && request.resource.data.status == "new"
+                    && request.resource.data.createdAt == request.time;
+      
+      // Only admin can read contact messages
+      allow read: if request.auth != null 
+                  && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+      
+      // Only admin can update contact status
+      allow update: if request.auth != null 
+                    && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin"
+                    && request.resource.data.status in ["new", "read", "replied"];
+      
+      // Only admin can delete contact messages
+      allow delete: if request.auth != null 
+                    && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+    }
+    
+    // ===== PRODUCTS COLLECTION =====
+    match /products/{productId} {
+      // Anyone can read active products
+      allow read: if resource.data.isActive == true
+                  || (request.auth != null 
+                      && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin");
+      
+      // Only admins can create, update, delete products
+      allow create, update, delete: if request.auth != null 
+                                    && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+    }
+    
+    // ===== CART COLLECTION =====
+    match /cart/{userId} {
+      // Users can read/write their own cart
+      allow read, write: if request.auth != null 
+                         && request.auth.uid == userId;
+    }
+    
+    // ===== ORDERS COLLECTION =====
+    match /orders/{orderId} {
+      // Users can read their own orders
+      allow read: if request.auth != null 
+                  && request.auth.uid == resource.data.userId;
+      
+      // Users can create their own orders
+      allow create: if request.auth != null 
+                    && request.auth.uid == request.resource.data.userId;
+      
+      // Admins can read/update all orders
+      allow read, update: if request.auth != null 
+                          && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+    }
+    
+    // ===== ADMIN COLLECTION =====
+    match /admin/{document=**} {
+      allow read, write: if request.auth != null 
+                         && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+    }
+  }
+}

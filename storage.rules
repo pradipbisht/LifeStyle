@@ -1,0 +1,59 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // ===== BLOG COVER IMAGES =====
+    match /blog-covers/{imageId} {
+      // Anyone can read blog cover images (public read)
+      allow read: if true;
+      
+      // Only VERIFIED users can upload blog cover images
+      allow create: if request.auth != null 
+                    && firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.isVerified == true
+                    // Validate file is an image
+                    && request.resource.contentType.matches('image/.*')
+                    // Max file size: 5MB
+                    && request.resource.size < 5 * 1024 * 1024;
+      
+      // Admins can update/delete any image
+      allow update, delete: if request.auth != null 
+                            && firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role == "admin";
+    }
+    
+    // ===== PRODUCT IMAGES =====
+    match /products/{imageId} {
+      // Anyone can read product images (public read)
+      allow read: if true;
+      
+      // Only ADMIN users can upload product images
+      allow create: if request.auth != null 
+                    && firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role == "admin"
+                    // Validate file is an image
+                    && request.resource.contentType.matches('image/.*')
+                    // Max file size: 5MB
+                    && request.resource.size < 5 * 1024 * 1024;
+      
+      // Only admins can update/delete product images
+      allow update, delete: if request.auth != null 
+                            && firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role == "admin";
+    }
+    
+    // ===== PROFILE IMAGES =====
+    match /profiles/{userId}/{imageId} {
+      // Anyone can read profile images
+      allow read: if true;
+      
+      // Users can upload their own profile pictures
+      allow create, update, delete: if request.auth != null 
+                                    && request.auth.uid == userId
+                                    && request.resource.contentType.matches('image/.*')
+                                    && request.resource.size < 5 * 1024 * 1024;
+    }
+    
+    // ===== DENY ALL OTHER PATHS =====
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

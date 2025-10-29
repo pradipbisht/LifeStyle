@@ -1,0 +1,76 @@
+// ============================================
+// FIRESTORE SECURITY RULES FOR CONTACT MESSAGES
+// ============================================
+// Add these rules to your firestore.rules file
+// Copy and paste into Firebase Console → Firestore Database → Rules
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ==========================================
+    // CONTACTS COLLECTION
+    // ==========================================
+    match /contacts/{contactId} {
+      // Anyone can create a contact message
+      // Validates required fields
+      allow create: if request.resource.data.name is string
+                    && request.resource.data.name.size() >= 2
+                    && request.resource.data.email is string
+                    && request.resource.data.email.matches('.*@.*\\..*')
+                    && request.resource.data.subject is string
+                    && request.resource.data.message is string
+                    && request.resource.data.message.size() >= 10
+                    && request.resource.data.message.size() <= 500
+                    && request.resource.data.status == "new"
+                    && request.resource.data.createdAt == request.time;
+      
+      // Only admin can read contact messages
+      allow read: if request.auth != null 
+                  && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+      
+      // Only admin can update contact status (mark as read/replied)
+      allow update: if request.auth != null 
+                    && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin"
+                    && request.resource.data.status in ["new", "read", "replied"];
+      
+      // Only admin can delete contact messages
+      allow delete: if request.auth != null 
+                    && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+    }
+  }
+}
+
+// ============================================
+// EXPLANATION:
+// ============================================
+
+// CREATE (Anyone):
+// - Name: Required, minimum 2 characters
+// - Email: Required, valid email format (contains @ and .)
+// - Subject: Required
+// - Message: Required, 10-500 characters
+// - Status: Must be "new" on creation
+// - CreatedAt: Must be current timestamp
+
+// READ (Admin only):
+// - Only users with role "admin" can view messages
+// - Protects user privacy
+
+// UPDATE (Admin only):
+// - Only admin can change status
+// - Status can only be: new, read, replied
+// - Prevents unauthorized modifications
+
+// DELETE (Admin only):
+// - Only admin can delete messages
+// - Prevents accidental or malicious deletion
+
+// ============================================
+// HOW TO APPLY:
+// ============================================
+// 1. Go to Firebase Console: https://console.firebase.google.com
+// 2. Select your project
+// 3. Navigate to: Firestore Database → Rules
+// 4. Add the "contacts" match block to your existing rules
+// 5. Click "Publish" to activate

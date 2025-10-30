@@ -114,7 +114,7 @@ export default function TopProduct() {
   }
 
   return (
-    <section className="py-12 bg-linear-to-b from-amber-50/30 to-white">
+    <section className="py-12">
       <div className="container mx-auto px-4 max-w-6xl">
         {/* Header */}
         <div className="text-center mb-10">
@@ -131,11 +131,17 @@ export default function TopProduct() {
           {products.map((product) => (
             <Card
               key={product.id}
-              className="group bg-white hover:shadow-lg transition-shadow duration-200 border border-gray-200 hover:border-amber-400 rounded-lg overflow-hidden">
+              className="group relative
+                         bg-white rounded-2xl shadow-lg border border-gray-100 // Adjusted card background, border, shadow
+                         overflow-hidden transform transition-all duration-300
+                         hover:-translate-y-1 hover:shadow-xl hover:border-amber-200">
+              {" "}
+              {/* Enhanced hover effects */}
               <CardContent className="p-0">
                 <Link href={`/shop/${product.id}`}>
-                  {/* Image */}
-                  <div className="relative aspect-square overflow-hidden bg-gray-50">
+                  <div className="relative aspect-square overflow-hidden rounded-t-2xl">
+                    {" "}
+                    {/* Adjusted rounded corners */}
                     <Image
                       src={
                         product.thumbnail ||
@@ -145,57 +151,68 @@ export default function TopProduct() {
                       alt={product.name}
                       fill
                       sizes="(max-width: 768px) 50vw, 33vw"
-                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      className="object-cover object-center 
+                                 transition-transform duration-500 group-hover:scale-105 group-hover:brightness-105" // Slightly less aggressive zoom on hover
                     />
+                    {product.isNew && (
+                      <div className="absolute top-3 left-3 bg-linear-to-br from-amber-500 to-orange-600 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-md z-10">
+                        {" "}
+                        {/* Enhanced 'New' badge */}
+                        New
+                      </div>
+                    )}
                   </div>
 
-                  {/* Product Info */}
-                  <div className="p-3">
-                    <h3 className="text-sm font-semibold text-gray-900 line-clamp-2 mb-1.5 group-hover:text-amber-600 transition-colors h-10">
+                  <div className="p-4">
+                    {" "}
+                    {/* Reduced padding slightly for a tighter look */}
+                    <h3 className="text-base md:text-lg font-bold text-gray-800 line-clamp-2 mb-2 group-hover:text-amber-700 transition-colors">
+                      {" "}
+                      {/* Adjusted font size and color */}
                       {product.name}
                     </h3>
-
-                    {/* Rating */}
-                    <div className="flex items-center gap-1 mb-2">
+                    {/* <div className="flex items-center gap-1 mb-3">
                       {[...Array(5)].map((_, i) => (
                         <Star
                           key={i}
-                          className={`w-3 h-3 ${
+                          className={`w-4 h-4 ${
                             i < Math.floor(product.rating || 0)
                               ? "fill-amber-400 text-amber-400"
                               : "text-gray-300"
                           }`}
                         />
                       ))}
-                      <span className="text-xs text-gray-500 ml-0.5">
+                      <span className="text-xs text-gray-500 ml-1">
                         ({product.reviews || 0})
                       </span>
-                    </div>
-
-                    {/* Price */}
-                    <div className="flex items-baseline gap-1.5 mb-2">
-                      <span className="text-lg font-bold text-gray-900">
+                    </div> */}
+                    {/* <div className="flex items-baseline gap-2 mb-4">
+                      <span className="text-xl font-bold text-amber-600">
                         {CURRENCY_SYMBOLS[product.currency]}
                         {product.price}
                       </span>
                       {product.originalPrice &&
                         product.originalPrice > product.price && (
-                          <span className="text-xs text-gray-400 line-through">
+                          <span className="text-sm text-gray-400 line-through">
                             {CURRENCY_SYMBOLS[product.currency]}
                             {product.originalPrice}
                           </span>
                         )}
-                    </div>
+                    </div> */}
                   </div>
                 </Link>
 
-                {/* Add to Cart Button */}
-                <div className="px-3 pb-3">
+                <div className="px-4 pb-4">
+                  {" "}
+                  {/* Adjusted padding */}
                   <Button
                     onClick={(e) => handleAddToCart(e, product)}
                     size="sm"
-                    className="w-full bg-amber-600 hover:bg-amber-700 text-white text-xs">
-                    <ShoppingCart className="w-3.5 h-3.5 mr-1.5" />
+                    className="w-full bg-amber-600 hover:bg-amber-700 text-white rounded-lg shadow-md hover:shadow-lg // Adjusted button roundedness
+                               transform transition-transform duration-200 hover:scale-105 flex items-center justify-center gap-2 font-semibold">
+                    {" "}
+                    {/* Added font-semibold */}
+                    <ShoppingCart className="w-4 h-4" />
                     Add to Cart
                   </Button>
                 </div>

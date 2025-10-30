@@ -7,6 +7,7 @@ import ImageSlider from "./ImageSlider";
 import CategoryGrid from "./categories";
 import { Playfair_Display } from "next/font/google";
 import { useState, useEffect } from "react";
+import CategoryIntegrations from "./newcategory";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -65,19 +66,22 @@ export default function HeroSection() {
           ))}
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-14 lg:py-16 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-8 items-center max-h-[500px] lg:max-h-[450px]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-14 lg:py-16 relative z-10">
+        <div className="grid lg:grid-cols-2 gap-6 lg:gap-8 items-center min-h-[400px] sm:min-h-[500px] lg:min-h-[450px]">
           {/* Left Side - Text Content */}
-          <div className="space-y-4 order-2 lg:order-1">
+          <div className="space-y-4 sm:space-y-6 order-2 lg:order-1 text-center lg:text-left">
             <Badge
               variant="secondary"
               className="inline-flex items-center gap-2 px-3 py-1.5 text-xs bg-blue-100 text-blue-700 border-blue-200 animate-pulse">
               <Sparkles className="h-3 w-3" />
-              Your Journey to Wellness Starts Here
+              <span className="hidden sm:inline">
+                Your Journey to Wellness Starts Here
+              </span>
+              <span className="sm:hidden">Wellness Journey</span>
             </Badge>
 
             <h1
-              className={`${playfair.className} text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[1.1]`}>
+              className={`${playfair.className} text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black tracking-tight leading-[1.1] sm:leading-[1.05]`}>
               <span className="inline-block animate-bounce-subtle bg-linear-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">
                 Wellness
               </span>
@@ -91,43 +95,46 @@ export default function HeroSection() {
               </span>
             </h1>
 
-            <p className="text-base md:text-lg text-gray-600 leading-relaxed max-w-xl animate-fade-in">
+            <p className="text-sm sm:text-base md:text-lg text-gray-600 leading-relaxed max-w-xl mx-auto lg:mx-0 animate-fade-in">
               Discover expert tips, personalized recommendations, and trusted
               advice for every aspect of your life.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-3 animate-fade-in-up">
+            <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start animate-fade-in-up">
               <Button
                 size="default"
-                className="gap-2 bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 group">
-                Explore Health & Wellness
+                className="gap-2 bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 group text-sm sm:text-base">
+                <span className="hidden sm:inline">
+                  Explore Health & Wellness
+                </span>
+                <span className="sm:hidden">Explore Wellness</span>
                 <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </Button>
               <Button
                 size="default"
                 variant="outline"
-                className="border-2 border-gray-300 hover:bg-gray-50 transition-all duration-300">
+                className="border-2 border-gray-300 hover:bg-gray-50 transition-all duration-300 text-sm sm:text-base">
                 Browse Products
               </Button>
             </div>
 
-            <div className="flex items-center gap-6 pt-2 animate-fade-in-up">
-              <div className="group cursor-pointer">
-                <div className="text-2xl font-bold text-gray-900 group-hover:scale-110 transition-transform">
+            <div className="flex items-center gap-4 sm:gap-6 pt-2 justify-center lg:justify-start animate-fade-in-up">
+              <div className="group cursor-pointer text-center lg:text-left">
+                <div className="text-xl sm:text-2xl font-bold text-gray-900 group-hover:scale-110 transition-transform">
                   500+
                 </div>
-                <div className="text-xs text-gray-600">Expert Articles</div>
+                <div className="text-xs text-gray-600">Articles</div>
               </div>
-              <div className="h-10 w-px bg-gray-300" />
-              <div className="group cursor-pointer">
-                <div className="text-2xl font-bold text-gray-900 group-hover:scale-110 transition-transform">
+              <div className="h-8 sm:h-10 w-px bg-gray-300" />
+              <div className="group cursor-pointer text-center lg:text-left">
+                <div className="text-xl sm:text-2xl font-bold text-gray-900 group-hover:scale-110 transition-transform">
                   50K+
                 </div>
-                <div className="text-xs text-gray-600">Happy Readers</div>
+                <div className="text-xs text-gray-600">Readers</div>
               </div>
-              <div className="h-10 w-px bg-gray-300" />
-              <div className="group cursor-pointer">
-                <div className="text-2xl font-bold text-gray-900 group-hover:scale-110 transition-transform">
+              <div className="h-8 sm:h-10 w-px bg-gray-300" />
+              <div className="group cursor-pointer text-center lg:text-left">
+                <div className="text-xl sm:text-2xl font-bold text-gray-900 group-hover:scale-110 transition-transform">
                   100+
                 </div>
                 <div className="text-xs text-gray-600">Products</div>
@@ -136,12 +143,13 @@ export default function HeroSection() {
           </div>
 
           {/* Right Side - Image Slider */}
-          <div className="order-1 lg:order-2 animate-fade-in-right h-[300px] lg:h-[400px]">
+          <div className="order-1 lg:order-2 animate-fade-in-right h-[250px] sm:h-[300px] lg:h-[400px] w-full">
             <ImageSlider />
           </div>
         </div>
 
-        <CategoryGrid />
+        {/* <CategoryGrid /> */}
+        <CategoryIntegrations />
       </div>
 
       <style jsx>{`

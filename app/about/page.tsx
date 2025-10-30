@@ -2,6 +2,8 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
+
 import { Heart, Users, Target, Sparkles } from "lucide-react";
 import { Playfair_Display } from "next/font/google";
 
@@ -14,7 +16,7 @@ export default function AboutPage() {
   return (
     <main>
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-linear-to-br from-blue-50/30 via-white to-blue-50/50 py-20 md:py-28">
+      <section className="relative overflow-hidden py-20 md:py-28">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <Badge className="mb-6 text-blue-700 border-blue-200">
             <Sparkles className="h-4 w-4 mr-2" />
@@ -36,7 +38,7 @@ export default function AboutPage() {
       </section>
 
       {/* Mission Section */}
-      <section className="py-20 bg-white">
+      <section className="py-12">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-3 gap-8">
             <div className="group p-8 rounded-2xl bg-linear-to-br from-blue-50 to-white border border-blue-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
@@ -81,40 +83,69 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Story Section */}
-      <section className="py-20 bg-linear-to-br from-blue-50/30 to-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2
-            className={`${playfair.className} text-4xl md:text-5xl font-bold text-gray-900 text-center mb-12`}>
-            Our Story
+      <section className="py-16 md:py-32">
+        <div className="mx-auto max-w-5xl space-y-8 px-6 md:space-y-16">
+          <h2 className="relative z-10 max-w-xl text-4xl font-medium lg:text-5xl">
+            Elevate your lifestyle with effortless elegance.
           </h2>
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            {/* Image */}
-            <div className="relative h-[400px] rounded-2xl overflow-hidden shadow-xl">
-              <img
-                src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&auto=format&fit=crop"
-                alt="Team collaboration"
-                className="w-full h-full object-cover"
-              />
+          <div className="grid gap-6 sm:grid-cols-2 md:gap-12 lg:gap-24">
+            <div className="relative mb-6 sm:mb-0">
+              <div className="bg-linear-to-b aspect-76/59 relative rounded-2xl from-zinc-300 to-transparent p-px dark:from-zinc-700">
+                <Image
+                  src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&auto=format&fit=crop"
+                  className="hidden rounded-[15px] dark:block"
+                  alt="payments illustration dark"
+                  width={1207}
+                  height={929}
+                />
+                <Image
+                  src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&auto=format&fit=crop"
+                  className="rounded-[15px] shadow dark:hidden"
+                  alt="payments illustration light"
+                  width={1207}
+                  height={929}
+                />
+              </div>
             </div>
 
-            {/* Story Text */}
-            <div className="space-y-6 text-lg text-gray-600 leading-relaxed">
-              <p>
-                Founded with a passion for holistic wellness, our platform has
-                grown from a simple blog into a comprehensive resource for
-                health, beauty, and lifestyle enthusiasts.
+            <div className="relative space-y-4">
+              <p className="text-muted-foreground">
+                LifestyleSphere is evolving to be more than just a brand.{" "}
+                <span className="text-accent-foreground font-bold">
+                  It empowers a complete lifestyle ecosystem
+                </span>{" "}
+                — from curated collections to inspired living.
               </p>
-              <p>
-                We believe that wellness is not one-size-fits-all. That's why we
-                offer personalized recommendations, expert-backed articles, and
-                a curated marketplace to help you find exactly what you need.
+
+              <p className="text-muted-foreground">
+                It brings together e-commerce, affiliate opportunities, and
+                creative storytelling — helping individuals and brands grow
+                through style, wellness, and purpose.
               </p>
-              <p>
-                Our team of wellness experts, writers, and health enthusiasts
-                work tirelessly to bring you the latest trends, proven tips, and
-                trusted product recommendations.
-              </p>
+
+              <div className="pt-6">
+                <blockquote className="border-l-4 pl-4">
+                  <p>
+                    Partnering with LifestyleSphere feels like joining a
+                    movement that values authenticity and design. Every product
+                    we promote connects us with an audience that truly cares
+                    about quality living.
+                  </p>
+
+                  <div className="mt-6 space-y-3">
+                    <cite className="block font-medium">
+                      Ava Collins, Lifestyle Partner
+                    </cite>
+                    <img
+                      className="h-5 w-fit dark:invert"
+                      src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg"
+                      alt="Amazon Logo"
+                      height="20"
+                      width="auto"
+                    />
+                  </div>
+                </blockquote>
+              </div>
             </div>
           </div>
         </div>

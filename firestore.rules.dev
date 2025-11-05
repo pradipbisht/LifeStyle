@@ -1,0 +1,88 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // DEVELOPMENT RULES - MORE PERMISSIVE FOR TESTING
+    // WARNING: DO NOT USE IN PRODUCTION
+    
+    // ===== USERS COLLECTION =====
+    match /users/{userId} {
+      allow read, write: if true; // Allow all for development
+    }
+    
+    // ===== BLOGS COLLECTION =====
+    match /blogs/{blogId} {
+      allow read, write: if true; // Allow all for development
+    }
+    
+    // ===== BLOG LIKES COLLECTION =====
+    match /blogLikes/{likeId} {
+      allow read, write: if true; // Allow all for development
+    }
+    
+    // ===== COMMENTS COLLECTION =====
+    match /comments/{commentId} {
+      allow read, write: if true; // Allow all for development
+    }
+    
+    // ===== LIKES COLLECTION =====
+    match /likes/{likeId} {
+      allow read, write: if true; // Allow all for development
+    }
+    
+    // ===== CONTACTS COLLECTION =====
+    match /contacts/{contactId} {
+      allow read, write: if true; // Allow all for development
+    }
+    
+    // ===== PRODUCTS COLLECTION =====
+    match /products/{productId} {
+      allow read, write: if true; // Allow all for development
+    }
+    
+    // ===== CART COLLECTION =====
+    match /cart/{userId} {
+      allow read, write: if true; // Allow all for development
+    }
+    
+    // ===== ORDERS COLLECTION =====
+    match /orders/{orderId} {
+      allow read, write: if true; // Allow all for development
+    }
+    
+    // ===== WISHLIST COLLECTION =====
+    match /wishlist/{wishlistId} {
+      allow read, write: if true; // Allow all for development
+    }
+
+    // ===== REVIEWS COLLECTION =====
+    match /reviews/{reviewId} {
+      allow read, write: if true; // Allow all for development
+    }
+    
+    // ===== ADMIN COLLECTION =====
+    match /admin/{document=**} {
+      allow read, write: if true; // Allow all for development
+    }
+    
+    // ===== EVENTS COLLECTION =====
+    match /events/{eventId} {
+      allow read, write: if true; // Allow all for development
+    }
+    
+    // ===== EMPLOYEES COLLECTION =====
+    match /employees/{employeeId} {
+      allow read, write: if true; // Allow all for development
+    }
+    
+    // ===== ATTENDANCE COLLECTION =====
+    match /attendance/{attendanceId} {
+      allow read, write: if true; // Allow all for development
+    }
+    
+    // ===== HOLIDAYS COLLECTION =====
+    match /holidays/{holidayId} {
+      allow read, write: if true; // Allow all for development
+    }
+  }
+}

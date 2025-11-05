@@ -7,6 +7,13 @@ import { CartProvider } from "@/lib/context/CartContext";
 import { WishlistProvider } from "@/components/context/WishlistContext";
 import { Toaster } from "sonner";
 import Navbar from "./ux/navbar/navbar";
+import { homePageMetadata } from "@/lib/seo/metadata";
+import {
+  OrganizationSchema,
+  WebsiteSchema,
+  organizationData,
+} from "@/lib/seo/structured-data";
+import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,10 +25,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "LifeStyle - Your Wellness Companion",
-  description: "Your trusted wellness and lifestyle platform",
-};
+export const metadata: Metadata = homePageMetadata;
 
 export default function RootLayout({
   children,
@@ -30,8 +34,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
+      <head>
+        <OrganizationSchema data={organizationData} />
+        <WebsiteSchema />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/manifest.json" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white relative`}>
+        <GoogleAnalytics />
         {/* Crosshatch Art - Light Pattern Background */}
         <div
           className="fixed inset-0 z-0 pointer-events-none"

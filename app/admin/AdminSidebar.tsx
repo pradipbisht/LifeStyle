@@ -11,6 +11,8 @@ import {
   ShoppingBag,
   BarChart3,
   Upload,
+  Calendar,
+  Clock,
 } from "lucide-react";
 import {
   Sidebar,
@@ -42,6 +44,16 @@ const menuItems = [
         title: "Blogs",
         icon: FileText,
         href: "/admin/blogs",
+      },
+      {
+        title: "Events",
+        icon: Calendar,
+        href: "/admin/events",
+      },
+      {
+        title: "Attendance",
+        icon: Clock,
+        href: "/admin/attendance",
       },
       {
         title: "Contacts",
@@ -82,6 +94,21 @@ const menuItems = [
         title: "Dashboard",
         icon: LayoutDashboard,
         href: "/admin",
+      },
+      {
+        title: "Database Setup",
+        icon: Upload,
+        href: "/admin/setup",
+      },
+      {
+        title: "Test Firebase",
+        icon: Upload,
+        href: "/admin/test-firebase",
+      },
+      {
+        title: "Direct Seed",
+        icon: Upload,
+        href: "/admin/direct-seed",
       },
     ],
   },

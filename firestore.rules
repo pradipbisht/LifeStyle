@@ -213,5 +213,29 @@ service cloud.firestore {
       allow read, write: if request.auth != null 
                          && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
     }
+    
+    // ===== EVENTS COLLECTION =====
+    match /events/{eventId} {
+      // TEMPORARY: Allow all operations for development/testing
+      allow read, write: if true;
+    }
+    
+    // ===== EMPLOYEES COLLECTION =====
+    match /employees/{employeeId} {
+      // TEMPORARY: Allow all operations for development/testing
+      allow read, write: if true;
+    }
+    
+    // ===== ATTENDANCE COLLECTION =====
+    match /attendance/{attendanceId} {
+      // TEMPORARY: Allow all operations for development/testing
+      allow read, write: if true;
+    }
+    
+    // ===== HOLIDAYS COLLECTION =====
+    match /holidays/{holidayId} {
+      // TEMPORARY: Allow all operations for development/testing
+      allow read, write: if true;
+    }
   }
 }

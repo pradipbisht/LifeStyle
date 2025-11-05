@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/context/AuthContext";
+import { LogoWithText } from "@/components/ui/logo";
 
 function NavbarLogo() {
   const { isAuthenticated } = useAuth();
@@ -23,21 +24,17 @@ function NavbarLogo() {
       const id = setTimeout(() => router.push("/profile"), 0);
       return () => clearTimeout(id);
     }
-  }, [clickCount, router]);
+  }, [clickCount, router, isAuthenticated]);
 
   const handleClick = () => setClickCount((prev) => prev + 1);
 
   return (
-    <button
-      type="button"
-      onClick={handleClick}
-      aria-label="Go to login (5 clicks)"
-      className="group cursor-pointer text-3xl font-semibold tracking-tight transition-all hover:scale-[1.03]">
-      <span className="text-primary transition-colors group-hover:text-primary/90">
-        Life
-      </span>
-      <span className="text-black/80 dark:text-white">Style</span>
-    </button>
+    <div onClick={handleClick} className="cursor-pointer">
+      <LogoWithText
+        size="md"
+        className="hover:scale-105 transition-transform"
+      />
+    </div>
   );
 }
 

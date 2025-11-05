@@ -19,10 +19,10 @@ function Navbar() {
   if (loading) return null;
 
   return (
-    <nav className="bg-background sticky top-0 z-50 border-b">
+    <nav className="bg-background items-center sticky top-0 z-50 border-b">
       <div className="container flex h-16 items-center px-4">
-        {/* Left Section — Logo */}
-        <div className="flex items-center space-x-4">
+        {/* Left Section — Logo with right margin */}
+        <div className="flex items-center space-x-4 ml-8">
           <NavbarLogo />
           <Separator orientation="vertical" className="h-6" />
         </div>
@@ -32,8 +32,8 @@ function Navbar() {
           <NavMenu />
         </div>
 
-        {/* Right Section — Auth Buttons or Profile */}
-        <div className="ml-auto flex items-center space-x-2">
+        {/* Right Section — Auth Buttons or Profile with extra right margin */}
+        <div className="ml-auto flex items-center space-x-2 mr-8">
           {/* Wishlist Icon */}
           {isAuthenticated && (
             <Link href="/dashboard/wishlist">

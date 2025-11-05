@@ -72,7 +72,9 @@ export default function TopProductChrome() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[...Array(6)].map((_, i) => (
-              <div key={i} className="bg-gray-200 animate-pulse rounded-xl h-96"></div>
+              <div
+                key={i}
+                className="bg-gray-200 animate-pulse rounded-xl h-96"></div>
             ))}
           </div>
         </div>
@@ -87,10 +89,10 @@ export default function TopProductChrome() {
   return (
     <section className="py-16 bg-linear-to-b from-amber-50/30 to-white relative overflow-hidden">
       {/* Background decoration */}
-      <div className="absolute inset-0 bg-gradient-to-r from-amber-100/20 to-orange-100/20"></div>
+      <div className="absolute inset-0 bg-linear-to-r from-amber-100/20 to-orange-100/20"></div>
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-amber-200/10 rounded-full blur-3xl"></div>
       <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-orange-200/10 rounded-full blur-3xl"></div>
-      
+
       <div className="relative container mx-auto px-4 max-w-7xl">
         {/* Header */}
         <div className="text-center mb-16">
@@ -102,8 +104,9 @@ export default function TopProductChrome() {
             <Sparkles className="h-8 w-8 text-amber-600" />
           </div>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Discover our carefully curated selection of premium products with interactive ChromeGrid technology. 
-            Move your cursor around to explore each product in detail.
+            Discover our carefully curated selection of premium products with
+            interactive ChromeGrid technology. Move your cursor around to
+            explore each product in detail.
           </p>
           <div className="mt-8 inline-flex items-center gap-2 px-6 py-3 bg-amber-100 text-amber-800 rounded-full text-sm font-medium">
             <Sparkles className="h-4 w-4" />
@@ -126,10 +129,9 @@ export default function TopProductChrome() {
         {/* View All Button */}
         <div className="text-center">
           <Link href="/shop">
-            <Button 
-              size="lg" 
-              className="bg-linear-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white px-8 py-4 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
-            >
+            <Button
+              size="lg"
+              className="bg-linear-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white px-8 py-4 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
               Explore All Products
               <ArrowRight className="w-5 h-5 ml-2" />
             </Button>

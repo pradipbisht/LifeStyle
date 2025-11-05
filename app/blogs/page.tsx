@@ -13,6 +13,7 @@ import { Playfair_Display } from "next/font/google";
 import CategoryFilter from "./components/CategoryFilter";
 import BlogGrid from "./components/BlogGrid";
 import BlogList from "./components/BlogList";
+import { BreadcrumbSchema } from "@/lib/seo/structured-data";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -86,76 +87,85 @@ export default function BlogsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-linear-gradient-to-b from-slate-50 to-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
-          <div>
-            <h1
-              className={`${playfair.className} text-4xl font-bold text-gray-900 mb-2`}>
-              Blog & Articles
-            </h1>
-            <p className="text-gray-600">
-              Discover wellness tips, health advice, and lifestyle insights
-            </p>
+    <>
+      <BreadcrumbSchema
+        data={[
+          { name: "Home", url: "https://lifestylehub.com" },
+          { name: "Blog", url: "https://lifestylehub.com/blogs" },
+        ]}
+      />
+
+      <div className="min-h-screen bg-linear-gradient-to-b from-slate-50 to-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          {/* Header */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+            <div>
+              <h1
+                className={`${playfair.className} text-4xl font-bold text-gray-900 mb-2`}>
+                Blog & Articles
+              </h1>
+              <p className="text-gray-600">
+                Discover wellness tips, health advice, and lifestyle insights
+              </p>
+            </div>
+            {isAuthenticated && (
+              <Button asChild className="bg-blue-600 hover:bg-blue-700">
+                <Link href="/blogs/create">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Write Article
+                </Link>
+              </Button>
+            )}
           </div>
-          {isAuthenticated && (
-            <Button asChild className="bg-blue-600 hover:bg-blue-700">
-              <Link href="/blogs/create">
-                <Plus className="h-4 w-4 mr-2" />
-                Write Article
-              </Link>
-            </Button>
+
+          {/* Category Filter */}
+          {!loading && blogs.length > 0 && (
+            <CategoryFilter
+              categories={categories}
+              selectedCategory={selectedCategory}
+              onSelectCategory={setSelectedCategory}
+              viewMode={viewMode}
+              onViewModeChange={setViewMode}
+            />
+          )}
+
+          {/* Blog Content */}
+          {loading ? (
+            <div className="flex items-center justify-center py-20">
+              <div className="h-12 w-12 animate-spin rounded-full border-4 border-blue-600 border-r-transparent"></div>
+              <span className="ml-3 text-gray-600 text-lg">
+                Loading articles...
+              </span>
+            </div>
+          ) : filteredBlogs.length === 0 ? (
+            <Card className="text-center py-12">
+              <CardContent>
+                <p className="text-gray-500 text-lg mb-4">
+                  {selectedCategory === "All"
+                    ? "No articles published yet."
+                    : `No articles found in "${selectedCategory}" category.`}
+                </p>
+                {isAuthenticated && selectedCategory === "All" && (
+                  <Button asChild className="bg-blue-600 hover:bg-blue-700">
+                    <Link href="/blogs/create">Be the first to write!</Link>
+                  </Button>
+                )}
+                {selectedCategory !== "All" && (
+                  <Button
+                    onClick={() => setSelectedCategory("All")}
+                    variant="outline">
+                    View All Articles
+                  </Button>
+                )}
+              </CardContent>
+            </Card>
+          ) : viewMode === "grid" ? (
+            <BlogGrid blogs={filteredBlogs} formatDate={formatDate} />
+          ) : (
+            <BlogList blogs={filteredBlogs} formatDate={formatDate} />
           )}
         </div>
-
-        {/* Category Filter */}
-        {!loading && blogs.length > 0 && (
-          <CategoryFilter
-            categories={categories}
-            selectedCategory={selectedCategory}
-            onSelectCategory={setSelectedCategory}
-            viewMode={viewMode}
-            onViewModeChange={setViewMode}
-          />
-        )}
-
-        {/* Blog Content */}
-        {loading ? (
-          <div className="flex items-center justify-center py-20">
-            <div className="h-12 w-12 animate-spin rounded-full border-4 border-blue-600 border-r-transparent"></div>
-            <span className="ml-3 text-gray-600 text-lg">
-              Loading articles...
-            </span>
-          </div>
-        ) : filteredBlogs.length === 0 ? (
-          <Card className="text-center py-12">
-            <CardContent>
-              <p className="text-gray-500 text-lg mb-4">
-                {selectedCategory === "All"
-                  ? "No articles published yet."
-                  : `No articles found in "${selectedCategory}" category.`}
-              </p>
-              {isAuthenticated && selectedCategory === "All" && (
-                <Button asChild className="bg-blue-600 hover:bg-blue-700">
-                  <Link href="/blogs/create">Be the first to write!</Link>
-                </Button>
-              )}
-              {selectedCategory !== "All" && (
-                <Button
-                  onClick={() => setSelectedCategory("All")}
-                  variant="outline">
-                  View All Articles
-                </Button>
-              )}
-            </CardContent>
-          </Card>
-        ) : viewMode === "grid" ? (
-          <BlogGrid blogs={filteredBlogs} formatDate={formatDate} />
-        ) : (
-          <BlogList blogs={filteredBlogs} formatDate={formatDate} />
-        )}
       </div>
-    </div>
+    </>
   );
 }

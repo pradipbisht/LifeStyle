@@ -171,34 +171,6 @@ export default function TopProduct() {
                       {/* Adjusted font size and color */}
                       {product.name}
                     </h3>
-                    {/* <div className="flex items-center gap-1 mb-3">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`w-4 h-4 ${
-                            i < Math.floor(product.rating || 0)
-                              ? "fill-amber-400 text-amber-400"
-                              : "text-gray-300"
-                          }`}
-                        />
-                      ))}
-                      <span className="text-xs text-gray-500 ml-1">
-                        ({product.reviews || 0})
-                      </span>
-                    </div> */}
-                    {/* <div className="flex items-baseline gap-2 mb-4">
-                      <span className="text-xl font-bold text-amber-600">
-                        {CURRENCY_SYMBOLS[product.currency]}
-                        {product.price}
-                      </span>
-                      {product.originalPrice &&
-                        product.originalPrice > product.price && (
-                          <span className="text-sm text-gray-400 line-through">
-                            {CURRENCY_SYMBOLS[product.currency]}
-                            {product.originalPrice}
-                          </span>
-                        )}
-                    </div> */}
                   </div>
                 </Link>
 

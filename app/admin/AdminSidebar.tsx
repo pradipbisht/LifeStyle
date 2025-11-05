@@ -68,6 +68,11 @@ const menuItems = [
         icon: BarChart3,
         href: "/admin/analytics",
       },
+      {
+        title: "Email Campaigns",
+        icon: FileText,
+        href: "/admin/email-campaigns",
+      },
     ],
   },
   {

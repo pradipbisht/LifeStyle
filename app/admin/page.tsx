@@ -8,7 +8,6 @@ import {
   Heart,
   ShoppingBag,
 } from "lucide-react";
-import DashboardHeader from "./components/DashboardHeader";
 import DashboardStatsCard from "./components/DashboardStatsCard";
 import RecentActivityCard from "./components/RecentActivityCard";
 import QuickActionsCard from "./components/QuickActionsCard";
@@ -68,17 +67,15 @@ export default function AdminPage() {
       value: stats.totalContacts,
       subtitle: "Total inquiries",
       icon: MessageSquare,
-      iconColor: "text-orange-600",
-      iconBgColor: "bg-orange-50",
-      borderColor: "border-l-orange-500",
+      iconColor: "text-gray-600",
+      iconBgColor: "bg-gray-50",
+      borderColor: "border-l-gray-500",
     },
   ];
 
   return (
-    <AdminLayout>
+    <AdminLayout title="Dashboard Overview">
       <div className="p-6 space-y-6">
-        <DashboardHeader />
-
         {loading ? (
           <div className="flex items-center justify-center py-12">
             <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-r-transparent"></div>
@@ -86,7 +83,7 @@ export default function AdminPage() {
           </div>
         ) : (
           <>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
               {statsConfig.map((stat) => (
                 <DashboardStatsCard
                   key={stat.title}

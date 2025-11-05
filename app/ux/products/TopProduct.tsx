@@ -132,7 +132,7 @@ export default function TopProduct() {
             <Card
               key={product.id}
               className="group relative
-                         bg-white rounded-2xl shadow-lg border border-gray-100 // Adjusted card background, border, shadow
+                         bg-white rounded-2xl border border-gray-100 // Adjusted card background, border, shadow
                          overflow-hidden transform transition-all duration-300
                          hover:-translate-y-1 hover:shadow-xl hover:border-amber-200">
               {" "}

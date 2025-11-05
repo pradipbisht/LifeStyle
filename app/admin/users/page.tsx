@@ -118,7 +118,9 @@ export default function AdminUsersPage() {
     users.length > 0 ? Math.round((verifiedCount / users.length) * 100) : 0;
 
   return (
-    <AdminLayout>
+    <AdminLayout
+      title="User Management"
+      breadcrumbs={[{ label: "Users", href: "/admin/users" }]}>
       <div className="p-6 space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">

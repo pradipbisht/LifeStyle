@@ -2,8 +2,9 @@ import React from "react";
 import HeroSection from "./pages/hero-section/HeroSection";
 import AboutPage from "./about/page";
 import Footer from "./ux/footer/footer";
-import LatestBlogs from "@/components/home/LatestBlogs";
 import TopProduct from "./ux/products/TopProduct";
+import LatestBlogs from "@/components/singleblogs/LatestBlogs";
+// import ChromaGridWrapper from "./ux/products/NewTopProduct";
 
 export default function HomePage() {
   return (
@@ -11,6 +12,7 @@ export default function HomePage() {
       <HeroSection />
       <AboutPage />
       <TopProduct />
+      {/* <ChromaGridWrapper /> */}
       <LatestBlogs />
       <Footer />
     </main>

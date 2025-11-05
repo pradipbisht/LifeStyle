@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { LucideIcon } from "lucide-react";
 
 interface DashboardStatsCardProps {
@@ -21,21 +21,19 @@ export default function DashboardStatsCard({
   borderColor,
 }: DashboardStatsCardProps) {
   return (
-    <Card className={`border-l-4 ${borderColor}`}>
-      <CardHeader className="pb-3">
+    <Card className="bg-white border-0 shadow-sm hover:shadow-md transition-shadow">
+      <CardContent className="p-4">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-sm font-medium text-gray-600">
-            {title}
-          </CardTitle>
+          <div className="flex-1">
+            <p className="text-sm text-gray-600 font-medium">{title}</p>
+            <p className="text-2xl font-bold text-gray-900 mt-1">{value}</p>
+            <p className="text-xs text-gray-500 mt-1">{subtitle}</p>
+          </div>
           <div
-            className={`h-10 w-10 rounded-lg ${iconBgColor} flex items-center justify-center`}>
-            <Icon className={`h-5 w-5 ${iconColor}`} />
+            className={`h-8 w-8 rounded-lg ${iconBgColor} flex items-center justify-center shrink-0`}>
+            <Icon className={`h-4 w-4 ${iconColor}`} />
           </div>
         </div>
-      </CardHeader>
-      <CardContent>
-        <div className="text-3xl font-bold text-gray-900">{value}</div>
-        <p className={`text-xs ${iconColor} mt-1`}>{subtitle}</p>
       </CardContent>
     </Card>
   );

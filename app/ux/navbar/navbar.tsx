@@ -4,16 +4,18 @@ import NavbarLogo from "./NavbarLogo";
 import NavDropDown from "./NavDropDown";
 import { useAuth } from "@/components/context/AuthContext";
 import { useCart } from "@/lib/context/CartContext";
+import { useWishlistContext } from "@/components/context/WishlistContext";
 import { Separator } from "@/components/ui/separator";
 import NavMobileMenu from "./NavMobMenu";
 import { NavMenu } from "./NavMenu";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart } from "lucide-react";
+import { ShoppingCart, Heart } from "lucide-react";
 
 function Navbar() {
   const { isAuthenticated, loading } = useAuth();
   const { cartCount } = useCart();
+  const { wishlistCount } = useWishlistContext();
   if (loading) return null;
 
   return (
@@ -32,6 +34,20 @@ function Navbar() {
 
         {/* Right Section — Auth Buttons or Profile */}
         <div className="ml-auto flex items-center space-x-2">
+          {/* Wishlist Icon */}
+          {isAuthenticated && (
+            <Link href="/dashboard/wishlist">
+              <Button variant="ghost" size="icon" className="relative">
+                <Heart className="h-5 w-5" />
+                {wishlistCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-semibold">
+                    {wishlistCount}
+                  </span>
+                )}
+              </Button>
+            </Link>
+          )}
+
           {/* Cart Icon */}
           <Link href="/cart">
             <Button variant="ghost" size="icon" className="relative">

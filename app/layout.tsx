@@ -4,6 +4,7 @@ import "./globals.css";
 
 import { AuthProvider } from "@/components/context/AuthContext";
 import { CartProvider } from "@/lib/context/CartContext";
+import { WishlistProvider } from "@/components/context/WishlistContext";
 import { Toaster } from "sonner";
 import Navbar from "./ux/navbar/navbar";
 
@@ -45,11 +46,13 @@ export default function RootLayout({
         />
         <AuthProvider>
           <CartProvider>
-            <div className="flex flex-col min-h-screen relative z-10">
-              <Navbar />
-              <main className="flex-1">{children}</main>
-            </div>
-            <Toaster position="top-center" richColors />
+            <WishlistProvider>
+              <div className="flex flex-col min-h-screen relative z-10">
+                <Navbar />
+                <main className="flex-1">{children}</main>
+              </div>
+              <Toaster position="top-center" richColors />
+            </WishlistProvider>
           </CartProvider>
         </AuthProvider>
       </body>

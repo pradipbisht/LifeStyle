@@ -1,53 +1,52 @@
-import { AppSidebar } from "@/components/app-sidebar";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { Separator } from "@/components/ui/separator";
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
+"use client";
 
-export default function Page() {
-  return (
-    <SidebarProvider>
-      <AppSidebar />
-      <SidebarInset>
-        <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
-          <SidebarTrigger className="-ml-1" />
-          <Separator
-            orientation="vertical"
-            className="mr-2 data-[orientation=vertical]:h-4"
-          />
-          <Breadcrumb>
-            <BreadcrumbList>
-              <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbLink href="#">
-                  Building Your Application
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator className="hidden md:block" />
-              <BreadcrumbItem>
-                <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
-        </header>
-        <div className="flex flex-1 flex-col gap-4 p-4">
-          <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-            <div className="bg-muted/50 aspect-video rounded-xl" />
-            <div className="bg-muted/50 aspect-video rounded-xl" />
-            <div className="bg-muted/50 aspect-video rounded-xl" />
+import { useState, useEffect } from "react";
+import DashboardLayout from "./user-dashboard/DashboardLayout";
+import WelcomeSection from "./components/WelcomeSection";
+import StatsGrid from "./components/StatsGrid";
+import RecentActivityCard from "./components/RecentActivityCard";
+import QuickActionsCard from "./components/QuickActionsCard";
+import RecommendationsCard from "./components/RecommendationsCard";
+import {
+  mockUser,
+  mockStats,
+  mockActivities,
+  mockRecommendations,
+} from "./components/mockData";
+
+export default function DashboardPage() {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate loading
+    const timer = setTimeout(() => setLoading(false), 1000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return (
+      <DashboardLayout user={mockUser}>
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <div className="text-center">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-r-transparent mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading your dashboard...</p>
           </div>
-          <div className="bg-muted/50 min-h-screen flex-1 rounded-xl md:min-h-min" />
         </div>
-      </SidebarInset>
-    </SidebarProvider>
+      </DashboardLayout>
+    );
+  }
+
+  return (
+    <DashboardLayout user={mockUser}>
+      <div className="p-6 space-y-6">
+        <WelcomeSection user={mockUser} stats={mockStats} />
+        <StatsGrid stats={mockStats} />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <RecentActivityCard activities={mockActivities} />
+          <QuickActionsCard />
+        </div>
+        <RecommendationsCard recommendations={mockRecommendations} />
+      </div>
+    </DashboardLayout>
   );
 }

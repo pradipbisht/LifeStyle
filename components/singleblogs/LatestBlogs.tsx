@@ -36,12 +36,11 @@ export default function LatestBlogs() {
     try {
       setLoading(true);
 
-      // Simplified query - no index needed
-      // Filter in code instead of Firestore query
+      // Simple query - no index needed, just orderBy
       const blogsQuery = query(
         collection(db, "blogs"),
         orderBy("createdAt", "desc"),
-        limit(10) // Get 10, filter to 3 published
+        limit(20) // Get more to ensure we have 3 published after filtering
       );
 
       const snapshot = await getDocs(blogsQuery);
@@ -50,7 +49,7 @@ export default function LatestBlogs() {
         ...doc.data(),
       })) as Blog[];
 
-      // Filter published blogs in JavaScript
+      // Filter published blogs in JavaScript (no index needed)
       const publishedBlogs = allBlogs
         .filter(
           (blog) => blog.status === "published" || blog.isPublished === true
@@ -60,6 +59,37 @@ export default function LatestBlogs() {
       setBlogs(publishedBlogs);
     } catch (error) {
       console.error("Error fetching blogs:", error);
+
+      // Fallback: try without orderBy if there's still an issue
+      try {
+        const fallbackQuery = query(collection(db, "blogs"), limit(20));
+
+        const fallbackSnapshot = await getDocs(fallbackQuery);
+        const fallbackBlogs = fallbackSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        })) as Blog[];
+
+        // Filter and sort in JavaScript
+        const publishedBlogs = fallbackBlogs
+          .filter(
+            (blog) => blog.status === "published" || blog.isPublished === true
+          )
+          .sort((a, b) => {
+            const dateA = a.createdAt?.toDate
+              ? a.createdAt.toDate()
+              : new Date(a.createdAt);
+            const dateB = b.createdAt?.toDate
+              ? b.createdAt.toDate()
+              : new Date(b.createdAt);
+            return dateB.getTime() - dateA.getTime();
+          })
+          .slice(0, 3);
+
+        setBlogs(publishedBlogs);
+      } catch (fallbackError) {
+        console.error("Fallback query also failed:", fallbackError);
+      }
     } finally {
       setLoading(false);
     }
@@ -150,7 +180,7 @@ export default function LatestBlogs() {
 
               <CardContent className="pt-0">
                 {/* Meta Info */}
-                <div className="flex items-center justify-between text-sm text-slate-500 mb-4">
+                {/* <div className="flex items-center justify-between text-sm text-slate-500 mb-4">
                   <div className="flex items-center gap-1">
                     <Calendar className="h-4 w-4" />
                     <span>{formatDate(blog.createdAt)}</span>
@@ -159,15 +189,15 @@ export default function LatestBlogs() {
                     <Heart className="h-4 w-4" />
                     <span>{blog.likes || 0}</span>
                   </div>
-                </div>
+                </div> */}
 
                 {/* Actions */}
                 <div className="flex items-center justify-between gap-3">
-                  <LikeButton
+                  {/* <LikeButton
                     blogId={blog.id}
                     initialLikes={blog.likes || 0}
                     size="sm"
-                  />
+                  /> */}
                   <Button
                     asChild
                     size="sm"
